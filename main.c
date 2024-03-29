@@ -200,3 +200,81 @@ void cp(char** args) {
         free(dest);
     }
 }
+
+char* extract_path(char* str) {
+    char* path = str;
+    if (str[0] == '"') {
+        path = strtok(str, "\"");
+        if (path != NULL) {
+            path = strdup(path);
+        }
+    }
+    return path;
+}
+
+void delete(char* str) {
+    char* path = extract_path(str);
+
+    if (remove(path) != 0) {
+        perror("delete");
+    }
+
+    if (path != str) {
+        free(path);
+    }
+}
+
+void mypipe(char** argv1, char** argv2) {
+    HANDLE hChildStd_OUT_Rd = NULL;
+    HANDLE hChildStd_OUT_Wr = NULL;
+    SECURITY_ATTRIBUTES saAttr;
+
+    saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+    saAttr.bInheritHandle = TRUE;
+    saAttr.lpSecurityDescriptor = NULL;
+
+    if (!CreatePipe(&hChildStd_OUT_Rd, &hChildStd_OUT_Wr, &saAttr, 0)) {
+        perror("CreatePipe");
+        return;
+    }
+
+    PROCESS_INFORMATION piProcInfo1;
+    STARTUPINFO siStartInfo1;
+
+    ZeroMemory(&piProcInfo1, sizeof(PROCESS_INFORMATION));
+    ZeroMemory(&siStartInfo1, sizeof(STARTUPINFO));
+
+    siStartInfo1.cb = sizeof(STARTUPINFO);
+    siStartInfo1.hStdOutput = hChildStd_OUT_Wr;
+    siStartInfo1.dwFlags |= STARTF_USESTDHANDLES;
+
+    if (!CreateProcess(NULL, argv1[0], NULL, NULL, TRUE, 0, NULL, NULL, &siStartInfo1, &piProcInfo1)) {
+        perror("CreateProcess");
+        return;
+    }
+
+    PROCESS_INFORMATION piProcInfo2;
+    STARTUPINFO siStartInfo2;
+
+    ZeroMemory(&piProcInfo2, sizeof(PROCESS_INFORMATION));
+    ZeroMemory(&siStartInfo2, sizeof(STARTUPINFO));
+
+    siStartInfo2.cb = sizeof(STARTUPINFO);
+    siStartInfo2.hStdInput = hChildStd_OUT_Rd;
+    siStartInfo2.dwFlags |= STARTF_USESTDHANDLES;
+
+    if (!CreateProcess(NULL, argv2[0], NULL, NULL, TRUE, 0, NULL, NULL, &siStartInfo2, &piProcInfo2)) {
+        perror("CreateProcess");
+        return;
+    }
+
+    CloseHandle(hChildStd_OUT_Wr);
+
+    WaitForSingleObject(piProcInfo1.hProcess, INFINITE);
+    WaitForSingleObject(piProcInfo2.hProcess, INFINITE);
+
+    CloseHandle(piProcInfo1.hProcess);
+    CloseHandle(piProcInfo1.hThread);
+    CloseHandle(piProcInfo2.hProcess);
+    CloseHandle(piProcInfo2.hThread);
+}

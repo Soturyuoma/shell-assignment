@@ -9,7 +9,46 @@
 int main() {
     printf("Welcome to my shell assignment!\n");
     Wellcome();
-    getLocation();
+
+    char input[1024];
+    char** args;
+
+    while (1) {
+        getLocation();
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0';  // Remove trailing newline
+
+        args = splitArgument(input);
+
+        if (args[0] == NULL) {
+            continue;
+        } else if (strcmp(args[0], "exit") == 0) {
+            logout(input);
+        } else if (strcmp(args[0], "move") == 0) {
+            move(args);
+        } else if (strcmp(args[0], "echoppend") == 0) {
+            echoppend(args);
+        } else if (strcmp(args[0], "echorite") == 0) {
+            echorite(args);
+        } else if (strcmp(args[0], "readFile") == 0) {
+            readFile(args);
+        } else if (strcmp(args[0], "wordCount") == 0) {
+            wordCount(args);
+        } else if (strcmp(args[0], "cd") == 0) {
+            cd(args);
+        } else if (strcmp(args[0], "cp") == 0) {
+            cp(args);
+        } else if (strcmp(args[0], "delete") == 0) {
+            delete(args[1]);
+        } else if (strcmp(args[0], "mypipe") == 0) {
+            // TODO: Parse the arguments for mypipe and call the function
+        } else {
+            printf("Unknown command: %s\n", args[0]);
+        }
+
+        free(args);
+    }
+
     return 0;
 }
 

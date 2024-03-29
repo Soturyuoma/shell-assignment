@@ -2,10 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 #include <windows.h>
 
 void Wellcome();
 void getLocation();
+char* extract_path(char* str);
+
 
 int main() {
     printf("Welcome to my shell assignment!\n");
@@ -47,6 +50,116 @@ void getLocation() {
     GetCurrentDirectoryA(sizeof(currentDir), currentDir);
 
     printf("\033[1m\033[32m%s@%s\033[0m:\033[1m\033[34m%s\033[0m$ ", username, hostname, currentDir);
+}
+
+void move(char** args) {
+    char* source = extract_path(args[1]);
+    char* dest = extract_path(args[2]);
+
+    if (rename(source, dest) != 0) {
+        perror("move");
+    }
+
+    if (source != args[1]) {
+        free(source);
+    }
+    if (dest != args[2]) {
+        free(dest);
+    }
+}
+
+void echoppend(char** args) {
+    char* path = extract_path(args[3]);
+
+    FILE* file = fopen(path, "a");
+    if (file == NULL) {
+        perror("echoppend");
+        return;
+    }
+
+    fprintf(file, "%s\n", args[1]);
+    fclose(file);
+
+    if (path != args[3]) {
+        free(path);
+    }
+}
+
+void echorite(char** args) {
+    char* path = extract_path(args[3]);
+
+    FILE* file = fopen(path, "w");
+    if (file == NULL) {
+        perror("echorite");
+        return;
+    }
+
+    fprintf(file, "%s\n", args[1]);
+    fclose(file);
+
+    if (path != args[3]) {
+        free(path);
+    }
+}
+
+
+void readFile(char** args) {
+    char* path = extract_path(args[1]);
+
+    FILE* file = fopen(path, "r");
+    if (file == NULL) {
+        perror("read");
+        return;
+    }
+
+    char buffer[4096];
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        printf("%s", buffer);
+    }
+
+    fclose(file);
+
+    if (path != args[1]) {
+        free(path);
+    }
+}
+
+void wordCount(char** args) {
+    char* option = args[1];
+    char* path = extract_path(args[2]);
+
+    FILE* file = fopen(path, "r");
+    if (file == NULL) {
+        perror("wordCount");
+        return;
+    }
+
+    int count = 0;
+    if (strcmp(option, "-l") == 0) {
+        char buffer[4096];
+        while (fgets(buffer, sizeof(buffer), file) != NULL) {
+            count++;
+        }
+        printf("Number of lines: %d\n", count);
+    } else if (strcmp(option, "-w") == 0) {
+        char c;
+        int in_word = 0;
+        while ((c = fgetc(file)) != EOF) {
+            if (isspace(c)) {
+                in_word = 0;
+            } else if (!in_word) {
+                in_word = 1;
+                count++;
+            }
+        }
+        printf("Number of words: %d\n", count);
+    }
+
+    fclose(file);
+
+    if (path != args[2]) {
+        free(path);
+    }
 }
 
 char** splitArgument(char* str) {

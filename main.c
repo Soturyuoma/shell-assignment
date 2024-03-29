@@ -4,11 +4,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <windows.h>
-
-void Wellcome();
-void getLocation();
-char* extract_path(char* str);
-
+#include "shell.h"
 
 int main() {
     printf("Welcome to my shell assignment!\n");
@@ -101,7 +97,6 @@ void echorite(char** args) {
         free(path);
     }
 }
-
 
 void readFile(char** args) {
     char* path = extract_path(args[1]);

@@ -46,8 +46,9 @@ Note: File paths containing spaces should be enclosed in double quotes.
 
 ## Code Structure
 
-- `shell.h`: Header file containing function declarations
-- `main.c`: Main source file containing function implementations
+- `shell.h`: Header file containing function declarations.
+- `main.c`: Main source file containing function implementations.
+- `shell.c`: shell source file containing all functions.
 
 ## Testing
 

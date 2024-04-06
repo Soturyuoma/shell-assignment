@@ -24,15 +24,16 @@ This is a simple shell program implemented in C for an operating systems course 
 2. Run the compiled executable: ./myshell
 3. Enter shell commands at the prompt.
 4. Command Examples:
-Move a file: move "tests\test1\file1.txt" "tests\test2\file1.txt"
-Append text to a file: echoppend text "tests\test1\file1.txt"
-Read a file: readFile "tests\test2\file2.txt"
-Overwrite a file with text: echorite text "tests\test1\file1.txt"
-Count lines in a file: wordCount -l "tests\test1\file1.txt"
-Count words in a file: wordCount -w "tests\test1\file1.txt"
-Copy a file: cp "tests\test1\file1.txt" "tests\test1\file1_copy.txt"
-Change directory: cd "filepath"
-Exit the shell: exit
+5. Move a file: move "tests\test1\file1.txt" "tests\test2\file1.txt"
+6. Append text to a file: echoppend text "tests\test1\file1.txt"
+7. Read a file: readFile "tests\test2\file2.txt"
+8. Overwrite a file with text: echorite text "tests\test1\file1.txt"
+9. Count lines in a file: wordCount -l "tests\test1\file1.txt"
+10. Count words in a file: wordCount -w "tests\test1\file1.txt"
+11. Copy a file: cp "tests\test1\file1.txt" "tests\test1\file1_copy.txt"
+12. Change directory: cd "filepath"
+13. Exit the shell: exit
+
 Note: File paths containing spaces should be enclosed in double quotes.
 
 ## Assumptions and Limitations

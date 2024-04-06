@@ -20,9 +20,20 @@ This is a simple shell program implemented in C for an operating systems course 
 
 ## Usage
 
-1. Compile the program using a C compiler: gcc -o shell main.c
-2. Run the compiled executable: ./shell
+1. Compile the program using a C compiler: gcc -o myshell main.c shell.c -std=c99
+2. Run the compiled executable: ./myshell
 3. Enter shell commands at the prompt.
+4. Command Examples:
+Move a file: move "tests\test1\file1.txt" "tests\test2\file1.txt"
+Append text to a file: echoppend text "tests\test1\file1.txt"
+Read a file: readFile "tests\test2\file2.txt"
+Overwrite a file with text: echorite text "tests\test1\file1.txt"
+Count lines in a file: wordCount -l "tests\test1\file1.txt"
+Count words in a file: wordCount -w "tests\test1\file1.txt"
+Copy a file: cp "tests\test1\file1.txt" "tests\test1\file1_copy.txt"
+Change directory: cd "filepath"
+Exit the shell: exit
+Note: File paths containing spaces should be enclosed in double quotes.
 
 ## Assumptions and Limitations
 

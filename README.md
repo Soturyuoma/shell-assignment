@@ -81,7 +81,6 @@ However, the testing may not be exhaustive, and there could be additional edge c
 ## Author
 
 [Soturyuoma]
-[sakerkhier@gmail.com]
 
 ## Date
 
